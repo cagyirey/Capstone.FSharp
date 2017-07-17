@@ -1,0 +1,13 @@
+group Main
+	framework: auto-detect
+    source https://www.nuget.org/api/v2
+
+	nuget FSharp.Core
+
+    github aquynh/capstone
+	
+group Build
+	framework: net45
+    source https://www.nuget.org/api/v2
+
+    nuget FAKE

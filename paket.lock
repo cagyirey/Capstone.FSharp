@@ -1,0 +1,12 @@
+RESTRICTION: == net45
+NUGET
+  remote: https://www.nuget.org/api/v2
+    FSharp.Core (4.2.1)
+GITHUB
+  remote: aquynh/capstone
+    FULLPROJECT (d4babd9808b10096905d6f47d3e46e54be9de4ca)
+GROUP Build
+RESTRICTION: == net45
+NUGET
+  remote: https://www.nuget.org/api/v2
+    FAKE (4.62.5)

@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2171C0E8-4915-49B9-AC23-A484FA08C126}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>capstonedll</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>capstone</TargetName>
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>capstone</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>capstone</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>capstone</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>CAPSTONE_X86_ATT_DISABLE_NO;CAPSTONE_DIET_NO;CAPSTONE_X86_REDUCE_NO;CAPSTONE_HAS_ARM;CAPSTONE_HAS_ARM64;CAPSTONE_HAS_MIPS;CAPSTONE_HAS_POWERPC;CAPSTONE_HAS_SPARC;CAPSTONE_HAS_SYSZ;CAPSTONE_HAS_X86;CAPSTONE_HAS_XCORE;CAPSTONE_USE_SYS_DYN_MEM;WIN32;_DEBUG;_WINDOWS;_USRDLL;CAPSTONE_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\paket-files\aquynh\capstone\include;..\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)capstone_dll.lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)\$(TargetName).pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>CAPSTONE_X86_ATT_DISABLE_NO;CAPSTONE_DIET_NO;CAPSTONE_X86_REDUCE_NO;CAPSTONE_HAS_ARM;CAPSTONE_HAS_ARM64;CAPSTONE_HAS_MIPS;CAPSTONE_HAS_POWERPC;CAPSTONE_HAS_SPARC;CAPSTONE_HAS_SYSZ;CAPSTONE_HAS_X86;CAPSTONE_HAS_XCORE;CAPSTONE_USE_SYS_DYN_MEM;WIN32;_DEBUG;_WINDOWS;_USRDLL;CAPSTONE_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\paket-files\aquynh\capstone\include;..\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)capstone_dll.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>CAPSTONE_X86_ATT_DISABLE_NO;CAPSTONE_DIET_NO;CAPSTONE_X86_REDUCE_NO;CAPSTONE_HAS_ARM;CAPSTONE_HAS_ARM64;CAPSTONE_HAS_MIPS;CAPSTONE_HAS_POWERPC;CAPSTONE_HAS_SPARC;CAPSTONE_HAS_SYSZ;CAPSTONE_HAS_X86;CAPSTONE_HAS_XCORE;CAPSTONE_USE_SYS_DYN_MEM;WIN32;NDEBUG;_WINDOWS;_USRDLL;CAPSTONE_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\paket-files\aquynh\capstone\include;..\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)capstone_dll.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>CAPSTONE_X86_ATT_DISABLE_NO;CAPSTONE_DIET_NO;CAPSTONE_X86_REDUCE_NO;CAPSTONE_HAS_ARM;CAPSTONE_HAS_ARM64;CAPSTONE_HAS_MIPS;CAPSTONE_HAS_POWERPC;CAPSTONE_HAS_SPARC;CAPSTONE_HAS_SYSZ;CAPSTONE_HAS_X86;CAPSTONE_HAS_XCORE;CAPSTONE_USE_SYS_DYN_MEM;WIN32;NDEBUG;_WINDOWS;_USRDLL;CAPSTONE_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\paket-files\aquynh\capstone\include;..\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <ImportLibrary>$(OutDir)capstone_dll.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\AArch64\AArch64BaseInfo.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\AArch64\AArch64Disassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\AArch64\AArch64InstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\AArch64\AArch64Mapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\AArch64\AArch64Module.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\ARM\ARMDisassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\ARM\ARMInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\ARM\ARMMapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\ARM\ARMModule.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Mips\MipsDisassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Mips\MipsInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Mips\MipsMapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Mips\MipsModule.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\PowerPC\PPCDisassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\PowerPC\PPCInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\PowerPC\PPCMapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\PowerPC\PPCModule.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Sparc\SparcDisassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Sparc\SparcInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Sparc\SparcMapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\Sparc\SparcModule.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\SystemZ\SystemZDisassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\SystemZ\SystemZInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\SystemZ\SystemZMapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\SystemZ\SystemZMCTargetDesc.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\SystemZ\SystemZModule.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\X86\X86ATTInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\X86\X86Disassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\X86\X86DisassemblerDecoder.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\X86\X86IntelInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\X86\X86Mapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\X86\X86Module.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\XCore\XCoreInstPrinter.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\XCore\XCoreDisassembler.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\XCore\XCoreMapping.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\arch\XCore\XCoreModule.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\cs.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\MCInst.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\MCInstrDesc.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\MCRegisterInfo.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\SStream.c" />
+    <ClCompile Include="..\..\paket-files\aquynh\capstone\utils.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
