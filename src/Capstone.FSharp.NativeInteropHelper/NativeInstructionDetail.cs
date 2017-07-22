@@ -45,8 +45,6 @@ namespace Capstone.FSharp.NativeInteropHelper
         ///     Number of Groups an Instruction Belongs to.
         /// </summary>
         public byte GroupCount;
-        
-        //public NativeArchitectureDetails ArchitectureSpecificDetails;
 
         /// <summary>
         ///     Get Managed Groups an Instruction Belongs to.
@@ -123,5 +121,6 @@ namespace Capstone.FSharp.NativeInteropHelper
             }
         }
     }
+
 }
 

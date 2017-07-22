@@ -160,7 +160,7 @@ module Disassembler =
         let mutable offset = codePtr 
 
         [| while CSInvoke.cs_disasm_iter(csh, &offset, &size, &addr, NativePtr.toNativeInt &&insn) && size > 0un do
-            let managedDetail = makeInstructionDetail<'Register, 'Group> (NativePtr.ofNativeInt insn.Details |> NativePtr.read) DetailsUnavailable (*(archCtor detail)*)
+            let managedDetail = makeInstructionDetail<'Register, 'Group> (NativePtr.ofNativeInt insn.Details |> NativePtr.read) (archCtor insn.NativeX86Detail)
             let instruction = makeInstruction<'Opcode,'Register,'Group> insn (Some managedDetail)
             yield instruction |]
     

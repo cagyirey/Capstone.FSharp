@@ -51,8 +51,8 @@ module X86 =
     | Invalid = 0
     | Register = 1
     | Immediate = 2
-    | Float = 3
-    | Memory = 4
+    | Memory = 3
+    | Float = 4
 
     let makeMemoryOperand (mem: NativeInterop.x86_op_mem) = { 
         Segment = enum<Register> (int mem.SegmentRegister)
@@ -84,14 +84,14 @@ module X86 =
         |> Seq.toArray
             
 
-    let makeInstructionInfo (details: NativeInterop.cs_arch_detail) = 
-        {   Prefix = details.X86.ManagedPrefix
-            REXPrefix = details.X86.RexPrefix
-            Opcode = details.X86.ManagedOpcode
-            SIB = details.X86.Sib
-            ModRM = details.X86.ModRM
-            SSECodeCondition = enum<SSEConditionCode> details.X86.SseCodeCondition 
-            AVXCodeCondition = enum<AVXConditionCode> details.X86.AvxCodeCondition
-            AVXRoundingMode = enum<AVXRoundingMode> details.X86.AvxRoundingMode
-            AVXSupressAllException = details.X86.AvxSuppressAllExceptions
-            Operands = makeOperands details.X86 }
+    let makeInstructionInfo (details: NativeInterop.cs_x86) = 
+        {   Prefix = details.ManagedPrefix
+            REXPrefix = details.RexPrefix
+            Opcode = details.ManagedOpcode
+            SIB = details.Sib
+            ModRM = details.ModRM
+            SSECodeCondition = enum<SSEConditionCode> details.SseCodeCondition 
+            AVXCodeCondition = enum<AVXConditionCode> details.AvxCodeCondition
+            AVXRoundingMode = enum<AVXRoundingMode> details.AvxRoundingMode
+            AVXSupressAllException = details.AvxSuppressAllExceptions
+            Operands = makeOperands details }

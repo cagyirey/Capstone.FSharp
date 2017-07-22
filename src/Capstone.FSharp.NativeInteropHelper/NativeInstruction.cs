@@ -53,5 +53,18 @@ namespace Capstone.FSharp.NativeInteropHelper
                 }
             }
         }
-}
+
+        /// <summary>
+        ///     Get Instruction's X86 Detail.
+        /// </summary>
+        public NativeX86InstructionDetail NativeX86Detail
+        {
+            get
+            {
+                var pDetail = NativeMethods.cs_x86_detail(this.Details);
+                return (NativeX86InstructionDetail)Marshal.PtrToStructure(pDetail, typeof(NativeX86InstructionDetail));
+            }
+        }
+    }
+
 }

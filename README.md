@@ -1,6 +1,10 @@
 # Capstone.FSharp
 
-F# bindings for @aquynh's Capstone Engine. Due to a bug in unmanaged interop, architecture-specific instruction details are disabled for now.
+F# bindings for @aquynh's Capstone Engine. Capstone.FSharp currently supports disassembling x86 instructions.
+
+### Installing
+
+Build Capstone.FSharp from the provided .sln file, build.cmd or build.sh. The solution is configured for .NET 4.5 and F# 4.1 by default.
 
 ### Usage (WIP)
 
@@ -29,31 +33,87 @@ for insn in insns do
 Produces output that looks like:
 
 ```fsharp
-{Opcode = PUSH;
- Address = 4096UL;
- Assembly = [|106uy; 255uy|];
- Mnemonic = "push";
- Operands = "-1";
- Details = Some {ImplicitReads = [|ESP|];
-                 ImplicitWrites = [|ESP|];
-                 Groups = [|NOT64BITMODE|];
-                 ArchitectureSpecificDetails = DetailsUnavailable;};}
-{Opcode = PUSH;
- Address = 4098UL;
- Assembly = [|104uy; 155uy; 108uy; 116uy; 1uy|];
- Mnemonic = "push";
- Operands = "0x1746c9b";
- Details = Some {ImplicitReads = [|ESP|];
-                 ImplicitWrites = [|ESP|];
-                 Groups = [|NOT64BITMODE|];
-                 ArchitectureSpecificDetails = DetailsUnavailable;};}
-{Opcode = MOV;
- Address = 4103UL;
- Assembly = [|100uy; 161uy; 0uy; 0uy; 0uy; 0uy|];
- Mnemonic = "mov";
- Operands = "eax, dword ptr fs:[0]";
- Details = Some {ImplicitReads = [||];
-                 ImplicitWrites = [||];
-                 Groups = [|MODE32|];
-                 ArchitectureSpecificDetails = DetailsUnavailable;};}
+[| {Opcode = PUSH;
+     Address = 4096UL;
+     Assembly = [|106uy; 255uy|];
+     Mnemonic = "push";
+     Operands = "-1";
+     Details =
+      Some
+        {ImplicitReads = [|ESP|];
+         ImplicitWrites = [|ESP|];
+         Groups = [|NOT64BITMODE|];
+         ArchitectureSpecificDetails =
+          X86Info {Prefix = [|0uy; 0uy; 0uy; 0uy|];
+                   REXPrefix = 0uy;
+                   Opcode = [|106uy; 0uy; 0uy; 0uy|];
+                   SIB = 0uy;
+                   ModRM = 0uy;
+                   SSECodeCondition = None;
+                   AVXCodeCondition = None;
+                   AVXRoundingMode = None;
+                   AVXSupressAllException = false;
+                   Operands = [|{Operand = Immediate -1L;
+                                 Size = 4uy;
+                                 AVXBroadcast = None;
+                                 AVXZeroOpmask = false;}|];};};};
+    {Opcode = PUSH;
+     Address = 4098UL;
+     Assembly = [|104uy; 155uy; 108uy; 116uy; 1uy|];
+     Mnemonic = "push";
+     Operands = "0x1746c9b";
+     Details =
+      Some
+        {ImplicitReads = [|ESP|];
+         ImplicitWrites = [|ESP|];
+         Groups = [|NOT64BITMODE|];
+         ArchitectureSpecificDetails =
+          X86Info {Prefix = [|0uy; 0uy; 0uy; 0uy|];
+                   REXPrefix = 0uy;
+                   Opcode = [|104uy; 0uy; 0uy; 0uy|];
+                   SIB = 0uy;
+                   ModRM = 0uy;
+                   SSECodeCondition = None;
+                   AVXCodeCondition = None;
+                   AVXRoundingMode = None;
+                   AVXSupressAllException = false;
+                   Operands = [|{Operand = Immediate 24407195L;
+                                 Size = 4uy;
+                                 AVXBroadcast = None;
+                                 AVXZeroOpmask = false;}|];};};};
+    {Opcode = MOV;
+     Address = 4103UL;
+     Assembly = [|100uy; 161uy; 0uy; 0uy; 0uy; 0uy|];
+     Mnemonic = "mov";
+     Operands = "eax, dword ptr fs:[0]";
+     Details =
+      Some
+        {ImplicitReads = [||];
+         ImplicitWrites = [||];
+         Groups = [|MODE32|];
+         ArchitectureSpecificDetails =
+          X86Info
+            {Prefix = [|0uy; 0uy; 0uy; 0uy|];
+             REXPrefix = 0uy;
+             Opcode = [|161uy; 0uy; 0uy; 0uy|];
+             SIB = 0uy;
+             ModRM = 0uy;
+             SSECodeCondition = None;
+             AVXCodeCondition = None;
+             AVXRoundingMode = None;
+             AVXSupressAllException = false;
+             Operands =
+              [|{Operand = Register EAX;
+                 Size = 4uy;
+                 AVXBroadcast = None;
+                 AVXZeroOpmask = false;};
+                {Operand = Memory {Segment = FS;
+                                   SIB = {Scale = 1;
+                                          Index = None;
+                                          Base = None;};
+                                   Displacement = 0L;};
+                 Size = 4uy;
+                 AVXBroadcast = None;
+                 AVXZeroOpmask = false;}|];};};};
+    ...|]
 ```

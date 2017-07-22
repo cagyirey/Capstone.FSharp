@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\paket-files\aquynh\capstone\MCRegisterInfo.c" />
     <ClCompile Include="..\..\paket-files\aquynh\capstone\SStream.c" />
     <ClCompile Include="..\..\paket-files\aquynh\capstone\utils.c" />
+    <ClCompile Include="NativeInteropHelper.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
