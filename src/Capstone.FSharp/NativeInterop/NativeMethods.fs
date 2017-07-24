@@ -5,8 +5,9 @@ open System.Runtime.InteropServices
 
 open Capstone.FSharp.NativeInterop.Disassembler
 
-module (*internal *) CSInvoke = 
+module internal CSInvoke = 
 
+    // TODO: LoadLibrary("capstone.dll")
     
     [<DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl)>]
     extern CapstoneError cs_open(Architecture arch, Mode mode, unativeint& csh)

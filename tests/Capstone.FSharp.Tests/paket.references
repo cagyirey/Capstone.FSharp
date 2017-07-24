@@ -1,0 +1,6 @@
+﻿FSharp.Core
+
+group Tests
+	FsUnit
+	NUnit.Console
+	File: FsUnit.fs

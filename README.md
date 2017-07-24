@@ -1,12 +1,12 @@
-# Capstone.FSharp
+# Capstone.FSharp [![Travis Build Status](https://travis-ci.org/cagyirey/Capstone.FSharp.svg?branch=master)](https://travis-ci.org/cagyirey/Capstone.FSharp) [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/rxkw455gwqr9ydhm?svg=true)](https://ci.appveyor.com/project/cagyirey/capstone-fsharp)
 
-F# bindings for @aquynh's Capstone Engine. Capstone.FSharp currently supports disassembling x86 instructions.
+F# bindings for [@aquynh](https://github.com/aquynh)'s Capstone Engine. Capstone.FSharp currently supports disassembling x86 instructions.
 
 ### Installing
 
 Build Capstone.FSharp from the provided .sln file, build.cmd or build.sh. The solution is configured for .NET 4.5 and F# 4.1 by default.
 
-### Usage (WIP)
+### Usage
 
 ```fsharp
 #r @"Capstone.FSharp"
@@ -14,32 +14,28 @@ Build Capstone.FSharp from the provided .sln file, build.cmd or build.sh. The so
 open System
 
 open Capstone.FSharp
-open Capstone.FSharp.X86
 open Capstone.FSharp.Disassembler
+open Capstone.FSharp.X86
 
 let shellcode = "\x6A\xFF\x68\x9B\x6C\x74\x01\x64\xA1\x00\x00\x00\x00\x50\x51\x56\x57\xA1\xA0\x98\xC7\x01\x33\xC4\x50\x8D\x44\x24\x10\x64\xA3\x00\x00\x00\x00\x8B\xF1\x89\x74\x24\x0C\x33\xFF\x68\x04\x01\x00\x00\xB9\xA0\xC5\xC9\x01\x89\x7E\x04\xE8\x53\x78\x8C\xFF\x83\xC0\x04\x89\x46\x04\xC7\x40\xFC\x00\x01\x00\x00\x8B\x44\x24\x20\x89\x7C\x24\x18\x89\x3E\x89\x7E\x08\x3D\xFF\xFF\xFF\x7F\x74\x08\x50\x8B\xCE\xE8\xEA\xA0\x96\xFF\x89\x7E\x0C\x89\x7E\x10\x8B\xC6\x8B\x4C\x24\x10\x64\x89\x0D\x00\x00\x00\x00\x59\x5F\x5E\x83\xC4\x10\xC2\x04\x00"B
 
-let disassembler = createDisassembler(X86Mode X86_32)
-    
-do disassembler.Details <- true
+let disassembler = CapstoneDisassembler(X86Mode X86_32, true)
 
-let insns = 
-    disassembler.Disassemble(0x1000UL, shellcode)
+let instructions = disassembler.Disassemble(0x1000UL, shellcode)
     
-for insn in insns do
-    printfn "%A" insn
+printfn "%A" instructions
 ```
 
 Produces output that looks like:
 
 ```fsharp
-[| {Opcode = PUSH;
-     Address = 4096UL;
-     Assembly = [|106uy; 255uy|];
-     Mnemonic = "push";
-     Operands = "-1";
-     Details =
-      Some
+[|{Opcode = PUSH;
+   Address = 4096UL;
+   Assembly = [|106uy; 255uy|];
+   Mnemonic = "push";
+   Operands = "-1";
+   Details =
+       Some
         {ImplicitReads = [|ESP|];
          ImplicitWrites = [|ESP|];
          Groups = [|NOT64BITMODE|];
@@ -117,3 +113,7 @@ Produces output that looks like:
                  AVXZeroOpmask = false;}|];};};};
     ...|]
 ```
+
+### Project Status
+
+Capstone.FSharp is currently in its alpha stage. It should be expected that there will be bugs, the final shape of the API may change, and some features are incomplete.

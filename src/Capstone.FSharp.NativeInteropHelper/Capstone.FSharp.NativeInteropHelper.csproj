@@ -42,9 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CapstoneProxyImport.cs" />
     <Compile Include="NativeInstruction.cs" />
     <Compile Include="NativeInstructionDetail.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="NativeX86InstructionDetail.cs" />
     <Compile Include="NativeX86InstructionMemoryOperandValue.cs" />
     <Compile Include="NativeX86InstructionOperand.cs" />

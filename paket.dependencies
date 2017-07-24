@@ -4,10 +4,18 @@ group Main
 
 	nuget FSharp.Core
 
-    github aquynh/capstone
+    github aquynh/capstone:d4babd9808b10096905d6f47d3e46e54be9de4ca
 	
 group Build
 	framework: net45
     source https://www.nuget.org/api/v2
 
     nuget FAKE
+
+group Tests
+	framework: net45
+    source https://www.nuget.org/api/v2
+
+	nuget FsUnit
+	nuget NUnit.Console
+	github fsprojects/FsUnit src/FsUnit.NUnit/FsUnit.fs

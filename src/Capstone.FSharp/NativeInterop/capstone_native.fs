@@ -3,9 +3,6 @@
 #nowarn "9"
 
 open System
-open System.Runtime.InteropServices
-open System.Runtime.CompilerServices
-open Microsoft.FSharp.NativeInterop
 
 [<AutoOpen>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -45,7 +42,7 @@ module Disassembler =
         | Mode = 3
         | Memory = 4
         | SkipData = 5
-//      | SkipDataSetup = 6 // native callbacks not supported
+      //| SkipDataSetup = 6 // native callbacks not supported
 
     type CapstoneOptionValue = 
         | Off = 0
@@ -68,14 +65,14 @@ module Disassembler =
         | VersionMismatch = 9
         | DietEngine = 10
 
-type cs_arch_detail = Capstone.FSharp.NativeInteropHelper.NativeArchitectureDetails
+type internal cs_arch_detail = Capstone.FSharp.NativeInteropHelper.NativeArchitectureDetails
 
-type cs_detail = Capstone.FSharp.NativeInteropHelper.NativeInstructionDetail
+type internal cs_detail = Capstone.FSharp.NativeInteropHelper.NativeInstructionDetail
 
-type cs_insn = Capstone.FSharp.NativeInteropHelper.NativeInstruction
+type internal cs_insn = Capstone.FSharp.NativeInteropHelper.NativeInstruction
         
-type cs_x86 = Capstone.FSharp.NativeInteropHelper.NativeX86InstructionDetail
+type internal cs_x86 = Capstone.FSharp.NativeInteropHelper.NativeX86InstructionDetail
 
-type x86_op_type = Capstone.FSharp.NativeInteropHelper.NativeX86InstructionOperandValue
+type internal x86_op_type = Capstone.FSharp.NativeInteropHelper.NativeX86InstructionOperandValue
 
-type x86_op_mem = Capstone.FSharp.NativeInteropHelper.NativeX86InstructionMemoryOperandValue
+type internal x86_op_mem = Capstone.FSharp.NativeInteropHelper.NativeX86InstructionMemoryOperandValue

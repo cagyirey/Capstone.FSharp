@@ -9,11 +9,13 @@ open System.IO
 open System.Runtime.InteropServices
 
 open FSharp.NativeInterop
+
 #nowarn "9"
 
 //[<AutoOpen>]
 module Disassembler = 
 
+    /// Indicates the compiled version of capstone.dll
     let BindingsVersion =
         let mutable major, minor = 0, 0
         do CSInvoke.cs_version(&major, &minor) |> ignore
@@ -34,8 +36,8 @@ module Disassembler =
         | ShortRegisters
     
     type AssemblySyntax = 
-        | X86 of X86Syntax
-        | PowerPC of PowerPCSyntax
+        | X86Syntax of X86Syntax
+        | PowerPCSyntax of PowerPCSyntax
     
     type X86Mode = 
         | X86_16
@@ -86,7 +88,7 @@ module Disassembler =
           Groups: 'Group array
           ArchitectureSpecificDetails: ArchitectureSpecificInstructionInfo }
     
-    let internal makeInstructionDetail<'Register, 'Group when 'Register: enum<int32> and 'Group: enum<int32>> (cs_detail: cs_detail) cs_arch = 
+    let private makeInstructionDetail<'Register, 'Group when 'Register: enum<int32> and 'Group: enum<int32>> (cs_detail: cs_detail) cs_arch = 
         { ImplicitReads = 
               cs_detail.ManagedReadRegisters
               |> Array.map(fun reg -> LanguagePrimitives.EnumOfValue<int32, 'Register>(int32 reg))
@@ -148,43 +150,49 @@ module Disassembler =
     | Arm64Mode -> Mode.Arm
     | SparcMode -> Mode.SparcV9
         
-    let disassembleInternal<'Opcode, 'Register, 'Group when 'Opcode: enum<int32> and 'Register: enum<int32> and 'Group: enum<int32>> addr (code: byte[]) csh (archCtor: _ -> ArchitectureSpecificInstructionInfo) =
+    let private disassembleInternal<'Opcode, 'Register, 'Group when 'Opcode: enum<int32> and 'Register: enum<int32> and 'Group: enum<int32>> addr (code: byte[]) csh details (archCtor: _ -> ArchitectureSpecificInstructionInfo) =
         use codePtr = fixed code
         
         let mutable insn = Unchecked.defaultof<cs_insn>
         let mutable detail = Unchecked.defaultof<cs_detail>
-        insn.Details <- NativePtr.toNativeInt &&detail
+
+        if details then 
+            insn.Details <- NativePtr.toNativeInt &&detail
 
         let mutable size = unativeint code.Length
         let mutable addr = addr
         let mutable offset = codePtr 
 
         [| while CSInvoke.cs_disasm_iter(csh, &offset, &size, &addr, NativePtr.toNativeInt &&insn) && size > 0un do
-            let managedDetail = makeInstructionDetail<'Register, 'Group> (NativePtr.ofNativeInt insn.Details |> NativePtr.read) (archCtor insn.NativeX86Detail)
-            let instruction = makeInstruction<'Opcode,'Register,'Group> insn (Some managedDetail)
+            let managedDetail = 
+                if details then 
+                    Some (makeInstructionDetail<'Register, 'Group> (NativePtr.ofNativeInt insn.Details |> NativePtr.read) (archCtor insn))
+                else None
+            let instruction = makeInstruction<'Opcode,'Register,'Group> insn managedDetail
             yield instruction |]
     
     [<Sealed>]
-    type public CapstoneDisassembler internal (disasm_mode: DisassemblyMode, ?detailsOn: bool) as this = 
+    type public CapstoneDisassembler (disassemblyMode: DisassemblyMode, ?detailsOn: bool) = 
         
+        // TODO: check capstone.dll for enabled architectures
         let arch = 
-            match disasm_mode with
-            | X86Mode _ -> Architecture.X86
-            | ArmMode _ -> Architecture.Arm
-            | MipsMode _ -> Architecture.Mips
-            | PowerPCMode _ -> Architecture.PowerPC
-            | Arm64Mode -> Architecture.Arm64
+            match disassemblyMode with
+            | X86Mode _ -> Architecture.X86 
+            | _ -> raise (NotSupportedException("Parameter `disassemblyMode` must be an instance of X86Mode"))
+            //| ArmMode _ -> Architecture.Arm
+            //| MipsMode _ -> Architecture.Mips
+            //| PowerPCMode _ -> Architecture.PowerPC
+            //| Arm64Mode -> Architecture.Arm64
         
-        let mutable mode = disasm_mode
-        let mutable cs_mode = capstoneMode disasm_mode
-        let mutable m_insn = 0n
+        let mutable mode = disassemblyMode
+        let mutable cs_mode = capstoneMode disassemblyMode
         let mutable handle = UIntPtr.Zero
         let mutable details = false
 
         let mutable syntax = 
             match arch with
-            | Architecture.X86 -> Some <| X86 X86Syntax.Intel
-            | Architecture.PowerPC -> Some <| PowerPC PowerPCSyntax.Standard
+            | Architecture.X86 -> Some <| X86Syntax Intel
+            | Architecture.PowerPC -> Some <| PowerPCSyntax Standard
             | _ -> None
         
         let setDetails enabled = 
@@ -202,22 +210,21 @@ module Disassembler =
         
         let setX86Syntax _syntax = 
             match CSInvoke.cs_option(handle, CapstoneOptionKind.Syntax, unativeint(if _syntax = X86Syntax.Intel then CapstoneOptionValue.IntelSyntax else CapstoneOptionValue.ATTSyntax)) with
-            | CapstoneError.Ok -> syntax <- Some(X86 _syntax)
+            | CapstoneError.Ok -> syntax <- Some(X86Syntax _syntax)
             | error -> raise (new CapstoneException(error))
         
         let setPowerPCSyntax _syntax = 
             match CSInvoke.cs_option(handle, CapstoneOptionKind.Syntax, unativeint(if _syntax = PowerPCSyntax.Standard then CapstoneOptionValue.DefaultSyntax else CapstoneOptionValue.PowerPCShortRegisters)) with
-            | CapstoneError.Ok -> syntax <- Some(PowerPC _syntax)
+            | CapstoneError.Ok -> syntax <- Some(PowerPCSyntax _syntax)
             | error -> raise (new CapstoneException(error))
         
         do 
             match CSInvoke.cs_open(arch, cs_mode, &handle) with
             | CapstoneError.Ok ->
                 if defaultArg detailsOn true then setDetails true
-                m_insn <- CSInvoke.cs_malloc handle
                 
             | error -> raise (new CapstoneException(error))
-          
+
         member x.Handle 
             with internal get () = handle
 
@@ -225,15 +232,19 @@ module Disassembler =
 
         member x.Disassemble(addr, code: byte []) : Instruction<_, _, _> [] =
             match x.Mode with
-            | X86Mode _ -> (X86.makeInstructionInfo >> X86Info) |> disassembleInternal<X86.Opcode, X86.Register, X86.InstructionGroup> addr code x.Handle
+            | X86Mode _ -> 
+                X86.Internal.makeInstructionInfo >> X86Info
+                |> disassembleInternal<X86.Opcode, X86.Register, X86.InstructionGroup> addr code x.Handle x.Details
             | _ -> raise (NotImplementedException())
 
-        member x.Mode 
+        member x.Mode
             with get () = mode
             and set (value) = 
                 match mode, value with
-                | ArmMode _, ArmMode _ | MipsMode _, MipsMode _ -> setMode value
-                | ArmMode _, _ | MipsMode _, _ -> raise <| new CapstoneException(CapstoneError.InvalidMode)
+                | ArmMode _, ArmMode _ 
+                | MipsMode _, MipsMode _ -> setMode value
+                | ArmMode _, _ 
+                | MipsMode _, _ -> raise <| new CapstoneException(CapstoneError.InvalidMode)
                 | _ -> raise (new CapstoneException("The current architecute does not support changing modes at runtime."))
         
         member x.Details 
@@ -248,8 +259,8 @@ module Disassembler =
             with get () = syntax
             and set (value: AssemblySyntax option) = 
                 match value with
-                | Some(X86 syn) when x.Architecture = Architecture.X86 -> setX86Syntax syn
-                | Some(PowerPC syn) when x.Architecture = Architecture.PowerPC -> setPowerPCSyntax syn
+                | Some(X86Syntax syn) when x.Architecture = Architecture.X86 -> setX86Syntax syn
+                | Some(PowerPCSyntax syn) when x.Architecture = Architecture.PowerPC -> setPowerPCSyntax syn
                 | None when x.Architecture = Architecture.X86 || x.Architecture = Architecture.PowerPC -> 
                     invalidArg "value" "The current architecture does not support the supplied syntax option."
                 | None -> ()
@@ -265,7 +276,3 @@ module Disassembler =
                     match CSInvoke.cs_close(&handle) with
                     | CapstoneError.Ok -> ()
                     | error -> raise (new CapstoneException(error))
-    
-    let createDisassembler(mode: DisassemblyMode) = new CapstoneDisassembler(mode)
-
-    let closeDisassembler(disasm: CapstoneDisassembler) = (disasm :> IDisposable).Dispose()
