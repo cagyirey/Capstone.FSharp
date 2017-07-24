@@ -13,5 +13,6 @@
 * Changed `X86` and `PowerPC` to `X86Syntax` and `PowerPCSyntax`
 
 ### 0.0.4 - July 24 2017
+* Changed `X86.OperandInfo.Operand` to `X86.OperandInfo.Value`
 * Removed `detailsOn` constructor parameter; use the `Details` property instead
 * Added x86-specific unit tests
