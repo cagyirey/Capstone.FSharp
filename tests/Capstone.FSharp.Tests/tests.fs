@@ -11,12 +11,12 @@ module ``Core disassembler tests`` =
 
     [<Test>]
     let ``Can instantiate a new disassembler`` () =
-        use disassembler = new CapstoneDisassembler(X86Mode X86_32, false)
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32)
         disassembler |> should be instanceOfType<CapstoneDisassembler>
 
     [<Test>]
     let ``Can enable detail disassembly`` () =
-        use disassembler = new CapstoneDisassembler(X86Mode X86_32, false)
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32)
         disassembler.Details |> should equal false
         disassembler.Details <- true
         disassembler.Details |> should equal true
@@ -24,7 +24,7 @@ module ``Core disassembler tests`` =
     [<Test>]
     let ``Can toggle disassembly syntax`` () =
         let intel, att = Some (X86Syntax Intel), Some (X86Syntax ATT)
-        use disassembler = new CapstoneDisassembler(X86Mode X86_32, false, Syntax=intel)
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32, Syntax=intel)
         disassembler.Syntax |> should equal intel
         disassembler.Syntax <- att
         disassembler.Syntax |> should equal att
@@ -50,12 +50,12 @@ module ``Core disassembler tests`` =
             {
                 Opcode = X86.Opcode.MOV;
                 Address = 4103UL;
-                Assembly = [|100uy; 161uy; 0uy; 0uy; 0uy; 0uy; |];
+                Assembly = [|100uy; 161uy; 0uy; 0uy; 0uy; 0uy;|];
                 Mnemonic = "mov";
                 Operands = "eax, dword ptr fs:[0]";
                 Details = None } |]
 
-        use disassembler = new CapstoneDisassembler(X86Mode X86_32, false)
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32)
         disassembler.Disassemble(0x1000UL, codeBytes)
         |> should equal disassembly
  
@@ -67,5 +67,53 @@ module ``Core disassembler tests`` =
     //    disassembler.Mode <- ArmMode Thumb
     //    disassembler.Mode |> should equal (ArmMode Thumb)
 
+[<TestFixture>]
+module ``X86 disassembly tests`` =
 
+    open Capstone.FSharp.X86
+
+    let movInstruction : X86Instruction = {
+        Opcode = Opcode.MOV;
+        Address = 4096UL;
+        Assembly = [|100uy; 161uy; 0uy; 0uy; 0uy; 0uy|];
+        Mnemonic = "mov";
+        Operands = "eax, dword ptr fs:[0]";
+        Details = Some {
+            ImplicitReads = [||];
+            ImplicitWrites = [||];
+            Groups = [|InstructionGroup.MODE32|];
+            ArchitectureSpecificDetails =
+            X86Info {
+                Prefix = [|0uy; 0uy; 0uy; 0uy|];
+                REXPrefix = 0uy;
+                Opcode = [|161uy; 0uy; 0uy; 0uy|];
+                SIB = 0uy;
+                ModRM = 0uy;
+                SSECodeCondition = SSEConditionCode.None;
+                AVXCodeCondition = AVXConditionCode.None;
+                AVXRoundingMode = AVXRoundingMode.None;
+                AVXSupressAllException = false;
+                Operands = [|{
+                    Value = Operand.Register Register.EAX;
+                    Size = 4uy;
+                    AVXBroadcast = AVXBroadcastKind.None;
+                    AVXZeroOpmask = false;};
+                    {Value = Memory {Segment = Register.FS;
+                                        SIB = {Scale = 1;
+                                                Index = Register.None;
+                                                Base = Register.None;};
+                                        Displacement = 0L;};
+                        Size = 4uy;
+                        AVXBroadcast = AVXBroadcastKind.None;
+                        AVXZeroOpmask = false;}|];};};};
+
+    [<Test>]
+    let ``Can disassemble X86 instruction details`` () =
+        let codeBytes = "\x64\xA1\x00\x00\x00\x00\x00"B
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32, Details=true)
+
+        disassembler.Disassemble(0x1000UL, codeBytes)
+        |> should equal [|movInstruction|]
+
+            
 

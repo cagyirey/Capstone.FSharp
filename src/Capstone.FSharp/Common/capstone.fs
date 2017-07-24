@@ -1,11 +1,8 @@
 ﻿namespace Capstone.FSharp
 
-open Capstone.FSharp
 open Capstone.FSharp.NativeInterop
 open Capstone.FSharp.NativeInterop.Disassembler
 
-open System
-open System.IO
 open System.Runtime.InteropServices
 
 open FSharp.NativeInterop
@@ -14,6 +11,7 @@ open FSharp.NativeInterop
 
 //[<AutoOpen>]
 module Disassembler = 
+    open System
 
     /// Indicates the compiled version of capstone.dll
     let BindingsVersion =
@@ -172,17 +170,17 @@ module Disassembler =
             yield instruction |]
     
     [<Sealed>]
-    type public CapstoneDisassembler (disassemblyMode: DisassemblyMode, ?detailsOn: bool) = 
+    type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) = 
         
         // TODO: check capstone.dll for enabled architectures
         let arch = 
             match disassemblyMode with
             | X86Mode _ -> Architecture.X86 
             | _ -> raise (NotSupportedException("Parameter `disassemblyMode` must be an instance of X86Mode"))
-            //| ArmMode _ -> Architecture.Arm
-            //| MipsMode _ -> Architecture.Mips
-            //| PowerPCMode _ -> Architecture.PowerPC
-            //| Arm64Mode -> Architecture.Arm64
+          //| ArmMode _ -> Architecture.Arm
+          //| MipsMode _ -> Architecture.Mips
+          //| PowerPCMode _ -> Architecture.PowerPC
+          //| Arm64Mode -> Architecture.Arm64
         
         let mutable mode = disassemblyMode
         let mutable cs_mode = capstoneMode disassemblyMode
@@ -220,9 +218,7 @@ module Disassembler =
         
         do 
             match CSInvoke.cs_open(arch, cs_mode, &handle) with
-            | CapstoneError.Ok ->
-                if defaultArg detailsOn true then setDetails true
-                
+            | CapstoneError.Ok -> ()
             | error -> raise (new CapstoneException(error))
 
         member x.Handle 

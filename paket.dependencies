@@ -4,7 +4,7 @@ group Main
 
 	nuget FSharp.Core
 
-    github aquynh/capstone:d4babd9808b10096905d6f47d3e46e54be9de4ca
+    github aquynh/capstone
 	
 group Build
 	framework: net45
