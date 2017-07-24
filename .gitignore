@@ -33,6 +33,7 @@ UpgradeLog*.htm
 # ===================================================
 
 *.fsx
+!build.fsx
 
 # FAKE build binaries
 .fake/
