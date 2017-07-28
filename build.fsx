@@ -116,7 +116,7 @@ Target "All" DoNothing
     ==> "AssemblyInfo"
     ==> "CopyLicense"
     ==> "Build"
-    =?>("ILMerge", configuration = "Release" && mergeBinaries)
+    =?>("ILMerge", mergeBinaries)
     ==> "RunTests"
     ==> "All"
 

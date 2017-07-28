@@ -27,8 +27,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>PdbOnly</DebugType>
     <Optimize>true</Optimize>
-    <Tailcalls>true</Tailcalls>
-    <OutputPath>\..\..\bin\$(Configuration)\</OutputPath>
+    <Tailcalls>false</Tailcalls>
+    <OutputPath>..\..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
