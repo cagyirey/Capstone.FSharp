@@ -1,21 +1,21 @@
 RESTRICTION: == net45
 NUGET
   remote: https://www.nuget.org/api/v2
-    FSharp.Core (4.2.1)
+    FSharp.Core (4.2.2)
 GITHUB
   remote: aquynh/capstone
-    FULLPROJECT (d4babd9808b10096905d6f47d3e46e54be9de4ca)
+    FULLPROJECT (85960f9eddbd47089fe840747ce89a9bba8e4337)
 GROUP Build
 RESTRICTION: == net45
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.62.5)
+    FAKE (4.63)
 
 GROUP Tests
 RESTRICTION: == net45
 NUGET
   remote: https://www.nuget.org/api/v2
-    FSharp.Core (4.2.1)
+    FSharp.Core (4.2.2)
     FsUnit (3.0)
       FSharp.Core (>= 3.1.2.5)
       NUnit (>= 3.6)
@@ -28,11 +28,11 @@ NUGET
       NUnit.Extension.TeamCityEventListener (>= 1.0.2)
       NUnit.Extension.VSProjectLoader (>= 3.5)
     NUnit.ConsoleRunner (3.7)
-    NUnit.Extension.NUnitProjectLoader (3.5)
+    NUnit.Extension.NUnitProjectLoader (3.6)
     NUnit.Extension.NUnitV2Driver (3.6)
     NUnit.Extension.NUnitV2ResultWriter (3.5)
     NUnit.Extension.TeamCityEventListener (1.0.2)
     NUnit.Extension.VSProjectLoader (3.5)
 GITHUB
   remote: fsprojects/FsUnit
-    src/FsUnit.NUnit/FsUnit.fs (d2700b69771379e7a28afa0b4e43da57f2da6e9b)
+    src/FsUnit.NUnit/FsUnit.fs (d8da7f1a51f2d1804179259bf61c7af4c49dff2c)

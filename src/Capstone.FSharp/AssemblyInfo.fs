@@ -6,8 +6,8 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyTitleAttribute("Capstone.FSharp")>]
 [<assembly: AssemblyProductAttribute("Capstone.FSharp")>]
 [<assembly: AssemblyDescriptionAttribute("Capstone Engine language bindings for F#.")>]
-[<assembly: AssemblyVersionAttribute("0.0.4")>]
-[<assembly: AssemblyFileVersionAttribute("0.0.4")>]
+[<assembly: AssemblyVersionAttribute("0.0.5")>]
+[<assembly: AssemblyFileVersionAttribute("0.0.5")>]
 [<assembly: GuidAttribute("8b18e4e0-376d-4aa8-86ac-4ded5a56305c")>]
 do ()
 
@@ -15,6 +15,6 @@ module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Capstone.FSharp"
     let [<Literal>] AssemblyProduct = "Capstone.FSharp"
     let [<Literal>] AssemblyDescription = "Capstone Engine language bindings for F#."
-    let [<Literal>] AssemblyVersion = "0.0.4"
-    let [<Literal>] AssemblyFileVersion = "0.0.4"
+    let [<Literal>] AssemblyVersion = "0.0.5"
+    let [<Literal>] AssemblyFileVersion = "0.0.5"
     let [<Literal>] Guid = "8b18e4e0-376d-4aa8-86ac-4ded5a56305c"

@@ -20,21 +20,21 @@ module Disassembler =
     
     [<Flags>]
     type Mode = 
-        | Default = 0b0
-        | LittleEndian = 0b0
-        | Arm = 0b0
-        | Mode16 = 0b10
-        | Mode32 = 0b100
-        | Mode64 = 0b1000
-        | Thumb = 0b1_0000
-        | Micro = 0b1_0000
-        | SparcV9 = 0b1_0000
-        | MClass = 0b10_0000
-        | N64 = 0b10_0000
-        | Mips3 = 0b100_0000
-        | Mips32R6 = 0b1000_0000
-        | MipsGP64 = 0b1_0000_0000
-        | BigEndian = 0b1000_0000_0000_0000_0000_0000_0000_0000
+        | Default =         0b0
+        | LittleEndian =    0b0
+        | Arm =             0b0
+        | Mode16 =          0b10
+        | Mode32 =          0b100
+        | Mode64 =          0b1000
+        | Thumb =           0b1_0000
+        | Micro =           0b1_0000
+        | SparcV9 =         0b1_0000
+        | MClass =          0b10_0000
+        | N64 =             0b10_0000
+        | Mips3 =           0b100_0000
+        | Mips32R6 =        0b1000_0000
+        | MipsGP64 =        0b1_0000_0000
+        | BigEndian =       0b1000_0000_0000_0000_0000_0000_0000_0000
     
     type CapstoneOptionKind = 
         | Syntax = 1

@@ -57,10 +57,8 @@ module internal Internal =
         SIB = { 
             Scale = mem.IndexRegisterScale
             Index = enum<Register> (int mem.IndexRegister)
-            Base = enum<Register> (int mem.BaseRegister)
-        }
-        Displacement = mem.Displacement
-        }
+            Base = enum<Register> (int mem.BaseRegister) }
+        Displacement = mem.Displacement }
 
     let private makeOperands (details: NativeInterop.cs_x86) =
         seq { 

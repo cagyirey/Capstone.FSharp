@@ -16,3 +16,9 @@
 * Changed `X86.OperandInfo.Operand` to `X86.OperandInfo.Value`
 * Removed `detailsOn` constructor parameter; use the `Details` property instead
 * Added x86-specific unit tests
+
+### 0.0.5 - August 10 2017
+* Added a `Disassemble` overload for pointer types (e.g. `IntPtr`, `SafeBuffer`)
+* Added ARM `InstructionGroup` type
+* Split disassembler model and implementation into `capstone.fs` and `disassembler.fs`
+* Cleaned up solution configuration
