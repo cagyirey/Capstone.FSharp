@@ -26,6 +26,7 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
     let mutable cs_mode = capstoneMode disassemblyMode
     let mutable handle = UIntPtr.Zero
     let mutable details = false
+    let mutable skipData = false
 
     let disassembleInternal address (code: nativeptr<byte>) length archCtor =
         
@@ -39,9 +40,12 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
         let mutable addr = address
         let mutable offset = code
 
-        [| while CSInvoke.cs_disasm_iter(this.Handle, &offset, &size, &addr, NativePtr.toNativeInt &&insn) && size > 0un do
+
+
+        [| while CSInvoke.cs_disasm_iter(this.Handle, &offset, &size, &addr, NativePtr.toNativeInt &&insn) do
             let managedDetail = 
-                if this.Details then 
+                // Instruction ID 0 indicates skipped data
+                if this.Details && insn.Id <> 0u then 
                     Some (makeInstructionDetail<'Register, 'Group> (NativePtr.ofNativeInt insn.Details |> NativePtr.read) (archCtor insn))
                 else None
             yield makeInstruction<'Opcode,'Register,'Group> insn managedDetail
@@ -61,7 +65,11 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
         match CSInvoke.cs_option(handle, CapstoneOptionKind.Details, unativeint(if enabled then CapstoneOptionValue.On else CapstoneOptionValue.Off)) with
         | CapstoneError.Ok -> details <- enabled
         | error -> raise (new CapstoneException(error))
-        
+
+    let setSkipdata enabled =
+        match CSInvoke.cs_option(handle, CapstoneOptionKind.SkipData, unativeint(if enabled then CapstoneOptionValue.On else CapstoneOptionValue.Off)) with
+        | CapstoneError.Ok -> skipData <- enabled
+        | error -> raise (new CapstoneException(error))
     // Arm and Mips may change between Arm and Thumb, Mips32 and Mips64 modes respectively at runtime
     let setMode newMode = 
         let newCapstoneMode = capstoneMode newMode
@@ -115,14 +123,6 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
             | MipsMode _, _ -> raise <| new CapstoneException(CapstoneError.InvalidMode)
             | _ -> raise (new CapstoneException("The current architecute does not support changing modes at runtime."))
         
-    member x.Details 
-        with get () = details
-        and set (value) = 
-            match value with
-            | true when not details -> setDetails true
-            | false when details -> setDetails false
-            | _ -> ()
-        
     member x.Syntax 
         with get () = syntax
         and set (value: AssemblySyntax option) = 
@@ -133,6 +133,22 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
                 invalidArg "value" "The current architecture does not support the supplied syntax option."
             | None -> ()
             | _ -> invalidArg "value" "The current architecture does not support the supplied syntax option."
+
+    member x.Details 
+        with get () = details
+        and set (value) = 
+            match value with
+            | true when not details -> setDetails true
+            | false when details -> setDetails false
+            | _ -> ()
+
+    member x.SkipData 
+        with get () = skipData
+        and set (value: bool) =
+            match value with
+            | true when not skipData -> setSkipdata true
+            | false when skipData -> setSkipdata false
+            | _ -> ()
         
     override x.Finalize() = (x :> IDisposable).Dispose()
 

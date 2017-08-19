@@ -22,6 +22,13 @@ module ``Core disassembler tests`` =
         disassembler.Details |> should equal true
 
     [<Test>]
+    let ``Can toggle SKIPDATA mode`` () =
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32)
+        disassembler.SkipData |> should equal false
+        disassembler.SkipData <- true
+        disassembler.SkipData |> should equal true
+        
+    [<Test>]
     let ``Can toggle disassembly syntax`` () =
         let intel, att = Some (X86Syntax Intel), Some (X86Syntax ATT)
         use disassembler = new CapstoneDisassembler(X86Mode X86_32, Syntax=intel)
@@ -59,6 +66,15 @@ module ``Core disassembler tests`` =
         disassembler.Disassemble(0x1000UL, codeBytes)
         |> should equal disassembly
  
+    [<Test>]
+    let ``Can skip inline data`` () =
+        let codeBytes = "\x8d\x4c\x32\x08\x01\xd8\x81\xc6\x34\x12\x00\x00\x00\x91\x92"B
+        use disassembler = new CapstoneDisassembler(X86Mode X86_32, SkipData=true)
+
+        disassembler.Disassemble(0x1000UL, codeBytes)
+        |> should haveLength 6
+
+
     // Requires ARM support
     //[<Test>]
     //let ``Can dynamically toggle disassembly mode`` () = 

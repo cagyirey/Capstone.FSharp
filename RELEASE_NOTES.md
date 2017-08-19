@@ -22,3 +22,7 @@
 * Added ARM `InstructionGroup` type
 * Split disassembler model and implementation into `capstone.fs` and `disassembler.fs`
 * Cleaned up solution configuration
+
+### 0.0.6 - August 19 2017
+* Added `CapstoneDisassembler.SkipData`
+* Fixed a bug that prevented the last instruction in a sequence from being disassembled.
