@@ -1,6 +1,6 @@
 ﻿namespace Capstone.FSharp.X86
 
-open System.Runtime.InteropServices
+#nowarn "58"
 
 open Capstone.FSharp
 

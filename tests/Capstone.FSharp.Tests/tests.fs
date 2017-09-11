@@ -1,5 +1,7 @@
 ﻿namespace Capstone.FSharp.Tests
 
+#nowarn "58"
+
 open NUnit.Framework
 open FsUnit
 
@@ -38,7 +40,7 @@ module ``Core disassembler tests`` =
 
     [<Test>]
     let ``Can disassemble basic x86 instructions`` () =
-        let codeBytes = "\x6A\xFF\x68\x9B\x6C\x74\x01\x64\xA1\x00\x00\x00\x00\x00"B
+        let codeBytes = "\x6A\xFF\x68\x9B\x6C\x74\x01\x64\xA1\x00\x00\x00\x00"B
         let disassembly : X86Instruction [] = [| 
             { 
                 Opcode = X86.Opcode.PUSH
@@ -73,7 +75,6 @@ module ``Core disassembler tests`` =
 
         disassembler.Disassemble(0x1000UL, codeBytes)
         |> should haveLength 6
-
 
     // Requires ARM support
     //[<Test>]

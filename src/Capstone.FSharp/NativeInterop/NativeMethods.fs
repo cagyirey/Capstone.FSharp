@@ -1,11 +1,19 @@
 ﻿namespace Capstone.FSharp
 
 open System
+open System.IO
+open System.Reflection
 open System.Runtime.InteropServices
 
 open Capstone.FSharp.NativeInterop.Disassembler
 
+module internal Kernel32 =
+    
+    [<DllImport("kernel32", CallingConvention = CallingConvention.Winapi)>]
+    extern nativeint LoadLibrary(string lpFileName)
+    
 module internal CSInvoke = 
+
     [<DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl)>]
     extern CapstoneError cs_open(Architecture arch, Mode mode, unativeint& csh)
     

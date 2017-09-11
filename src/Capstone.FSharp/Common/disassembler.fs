@@ -8,10 +8,20 @@ open Microsoft.FSharp.NativeInterop
 
 open Capstone.FSharp
 open Capstone.FSharp.NativeInterop
+open System.IO
 
 [<Sealed>]
 type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this = 
-        
+
+    // this has to be the static constructor of the type that invokes capstone.dll to get evaluated
+    static do 
+        let dllPath = 
+            let subdir = if sizeof<nativeint> = 4 then "\\win32" else "\\x64"
+            // using the name of a type ensures this will work in dynamic contexts
+            Path.GetDirectoryName(Uri(typeof<CapstoneDisassembler>.Assembly.CodeBase).LocalPath) + subdir + "\\capstone.dll"
+        if File.Exists dllPath then 
+            Kernel32.LoadLibrary(dllPath) |> ignore
+
     // TODO: check capstone.dll for enabled architectures
     let arch = 
         match disassemblyMode with
@@ -39,9 +49,7 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
         let mutable size = unativeint length
         let mutable addr = address
         let mutable offset = code
-
-
-
+        
         [| while CSInvoke.cs_disasm_iter(this.Handle, &offset, &size, &addr, NativePtr.toNativeInt &&insn) do
             let managedDetail = 
                 // Instruction ID 0 indicates skipped data
@@ -70,6 +78,7 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
         match CSInvoke.cs_option(handle, CapstoneOptionKind.SkipData, unativeint(if enabled then CapstoneOptionValue.On else CapstoneOptionValue.Off)) with
         | CapstoneError.Ok -> skipData <- enabled
         | error -> raise (new CapstoneException(error))
+
     // Arm and Mips may change between Arm and Thumb, Mips32 and Mips64 modes respectively at runtime
     let setMode newMode = 
         let newCapstoneMode = capstoneMode newMode
@@ -136,19 +145,11 @@ type public CapstoneDisassembler (disassemblyMode: DisassemblyMode) as this =
 
     member x.Details 
         with get () = details
-        and set (value) = 
-            match value with
-            | true when not details -> setDetails true
-            | false when details -> setDetails false
-            | _ -> ()
+        and set value = setDetails value
 
     member x.SkipData 
         with get () = skipData
-        and set (value: bool) =
-            match value with
-            | true when not skipData -> setSkipdata true
-            | false when skipData -> setSkipdata false
-            | _ -> ()
+        and set value = setSkipdata value
         
     override x.Finalize() = (x :> IDisposable).Dispose()
 

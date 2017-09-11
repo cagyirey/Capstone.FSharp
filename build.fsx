@@ -67,12 +67,6 @@ Target "CopyLicense" (fun _ ->
     |> CopyTo (outputDir)
 )
 
-Target "BuildCapstone" (fun _ ->
-    !! "/src/capstone_dll/capstone.vcxproj"
-    |> MSBuildRelease "" "Rebuild"
-    |> ignore
-)
-
 Target "Build" (fun _ ->
     !! solutionFile
     |> MSBuildRelease outputDir "Rebuild"
@@ -105,8 +99,7 @@ Target "RunTests" (fun _ ->
         { p with
             WorkingDir = Path.GetFullPath (outputDir)
             ShadowCopy = false
-            TimeOut = TimeSpan.FromMinutes 10.
-            Force32bit=true})
+            TimeOut = TimeSpan.FromMinutes 10. })
 )
 
 Target "All" DoNothing

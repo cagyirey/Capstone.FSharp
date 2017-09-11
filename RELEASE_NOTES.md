@@ -26,3 +26,7 @@
 ### 0.0.6 - August 19 2017
 * Added `CapstoneDisassembler.SkipData`
 * Fixed a bug that prevented the last instruction in a sequence from being disassembled.
+
+### 0.0.7 - September 10 2017
+* Changed `BindingsVersion` to `CapstoneVersion`
+* Added a 64-bit version of capstone.dll and logic to load the correct version at runtime.

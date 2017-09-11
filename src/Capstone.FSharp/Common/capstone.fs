@@ -1,13 +1,14 @@
 ﻿namespace Capstone.FSharp
 
+open System
+
 open Capstone.FSharp.NativeInterop
 
 [<AutoOpen>]
 module Disassembler = 
-    open System
 
     /// Indicates the compiled version of capstone.dll
-    let BindingsVersion =
+    let CapstoneVersion =
         let mutable major, minor = 0, 0
         do CSInvoke.cs_version(&major, &minor) |> ignore
         Version(major, minor)
@@ -64,8 +65,8 @@ module Disassembler =
         | SparcMode
         | XCodeMode
         | SystemZMode
-    
         | DetailsUnavailable
+
     type ArchitectureSpecificInstructionInfo = 
         | X86Info of X86.InstructionInfo
         | ArmInfo
@@ -142,3 +143,4 @@ module Disassembler =
         | PowerPC64 -> Mode.Mode64 ||| getEndianMode endian
     | Arm64Mode -> Mode.Arm
     | SparcMode -> Mode.SparcV9
+    
