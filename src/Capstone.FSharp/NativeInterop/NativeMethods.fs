@@ -33,7 +33,7 @@ module internal CSInvoke =
     extern bool cs_support(Architecture arch)
     
     [<DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl)>]
-    extern String cs_strerror(CapstoneError error)
+    extern string cs_strerror(CapstoneError error)
     
     [<DllImport("capstone.dll", CallingConvention = CallingConvention.Cdecl)>]
     extern void cs_free(nativeint insn, unativeint count)

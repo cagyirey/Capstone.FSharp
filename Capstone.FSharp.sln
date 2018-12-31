@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Capstone.FSharp", "src\Capstone.FSharp\Capstone.FSharp.fsproj", "{8B18E4E0-376D-4AA8-86AC-4DED5A56305C}"
 	ProjectSection(ProjectDependencies) = postProject

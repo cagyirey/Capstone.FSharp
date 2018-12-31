@@ -115,11 +115,13 @@ module ``X86 disassembly tests`` =
                     Size = 4uy;
                     AVXBroadcast = AVXBroadcastKind.None;
                     AVXZeroOpmask = false;};
-                    {Value = Memory {Segment = Register.FS;
-                                        SIB = {Scale = 1;
-                                                Index = Register.None;
-                                                Base = Register.None;};
-                                        Displacement = 0L;};
+                    {Value = Memory {
+                        Segment = Register.FS;
+                        SIB = {
+                            Scale = 1;
+                            Index = Register.None;
+                            Base = Register.None;};
+                        Displacement = 0L;};
                         Size = 4uy;
                         AVXBroadcast = AVXBroadcastKind.None;
                         AVXZeroOpmask = false;}|];};};};
